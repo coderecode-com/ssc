@@ -1,1 +1,1 @@
-# This repository is for private use
+# This repository is for internal use
