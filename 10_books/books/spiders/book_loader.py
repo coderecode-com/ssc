@@ -1,4 +1,6 @@
 import scrapy
+from scrapy.loader import ItemLoader
+
 from books.items import BooksItem
 
 
@@ -8,17 +10,16 @@ class BookLoaderSpider(scrapy.Spider):
     start_urls = ['https://books.toscrape.com/']
 
     def parse(self, response):
+        # inspect_response(response, self)
         for s in response.xpath('//ol[@class="row"]/li'):
-            title = s.xpath('.//img/@alt').get()
-            price_raw = s.xpath('.//*[@class="price_color"]/text()').get()
-            price_object = Price.fromstring(price_raw)
-            price = price_object.amount_float
-            # item = BooksItem(title=title, price=price)
-            item = BooksItem()
-            item['title'] = title
-            item['price'] = price
+            loader = ItemLoader(item=BooksItem(), response=response, selector=s)
 
-            yield item
+            loader.add_xpath('title', './/img/@alt')
+            loader.add_xpath('price', './/*[@class="price_color"]/text()')
+            loader.add_xpath('currency', './/*[@class="price_color"]/text()')
+            loader.add_xpath('available', './/*[@class="instock availability"]')
+            loader.add_xpath('in_stock', './/*[@class="instock availability"]/text()')
+            yield loader.load_item()
 
         next_page = response.xpath('//li[@class="next"]/a/@href').get()
         if next_page:
