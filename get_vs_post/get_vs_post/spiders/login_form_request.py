@@ -17,7 +17,10 @@ class PostRequestSpider(scrapy.Spider):
             'username': 'upendra',
             'password': 'secret'
         }
-        yield FormRequest(url, formdata=data, callback=self.after_login)
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+        yield FormRequest(url, formdata=data, headers=headers,
+                          callback=self.after_login)
 
     def after_login(self, response):
         # check login succeed before going on
