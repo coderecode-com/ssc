@@ -9,6 +9,7 @@ class PostRequestSpider(scrapy.Spider):
     start_urls = ['https://quotes.toscrape.com/login']
 
     def parse(self, response):
+        open_in_browser()
         self.logger.info('Logging In.')
         token = response.xpath('//input[@name="csrf_token"]/@value').get()
         url = 'https://quotes.toscrape.com/login'

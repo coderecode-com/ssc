@@ -1,23 +1,25 @@
 import scrapy
-import json
 from scrapy import FormRequest
 
 
-class PostRequestSpider(scrapy.Spider):
+class FormRequestSpider(scrapy.Spider):
     name = 'form_request'
 
     def start_requests(self):
-        url = "http://httpbin.org/post"
-        headers = {
-            'accept': 'application/json'
+        url = 'http://httpbin.org/post'
+        form_data = {
+            'username': 'admin',
+            'password': 'secret'
         }
-        data = {'user': 'upendra',
-                'password':'secret'}
-
-        yield FormRequest(url=url,
-                          headers=headers,
-                          formdata=data,
-                          callback=self.parse)
+        custom_headers = {
+            'user-agent': 'this is my user agent'
+        }
+        yield FormRequest(url,
+                          headers=custom_headers,
+                          formdata=form_data,
+                          callback=self.parse
+                          )
 
     def parse(self, response):
-        print(response.text)
+        self.logger.info('Successfully received the response')
+        self.logger.debug(response.text)

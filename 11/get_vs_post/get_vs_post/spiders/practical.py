@@ -1,8 +1,5 @@
-import urllib
 import scrapy
-from scrapy import FormRequest, Request
-import scraper_helper as sh
-from scrapy.shell import inspect_response
+from scrapy import FormRequest
 
 
 class AspxSpider(scrapy.Spider):
@@ -17,16 +14,14 @@ class AspxSpider(scrapy.Spider):
         }
 
         yield FormRequest.from_response(response,
-                          formdata=form,
-                          callback=self.parse_table)
+                                        formdata=form,
+                                        callback=self.parse_table)
 
     def parse_table(self, response):
         rows = response.xpath('//table[contains(@id, "gvDetailsSearchView")]//tr[td]')
         for row in rows:
-            yield {
-                'code': row.xpath('./td[1]/text()').get(),
-                'value': row.xpath('./td[2]/text()').get()
-            }
-        # todo: pagination
-        # find event target
-        # keep track of pages by using cb_kwargs
+            if row.xpath('./td[1]/text()').get():
+                yield {
+                    'code': row.xpath('./td[1]/text()').get(),
+                    'value': row.xpath('./td[2]/text()').get()
+                }
