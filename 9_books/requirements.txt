@@ -1,3 +1,0 @@
-Scrapy
-scraper-helper
-price-parser
