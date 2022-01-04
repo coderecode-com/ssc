@@ -5,7 +5,6 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 
 
@@ -32,11 +31,11 @@ class QuotesPipeline:
         spider.logger.info('Opening spider')
 
     def process_item(self, item, spider):
+        text = item.get('Quote')
         for word in self.stop_words:
-            if word in item.get('Quote').lower():
-                raise DropItem(f'Contains stop words: {word}')
-        
-        spider.logger.info(f'Processing item: {type(item)}')
+            if word in text.lower():
+                #  raise DropItem("Stop word found.")
+                item['Quote'] = text.replace(word, '*' * len(word))
         return item
 
     def close_spider(self, spider):
