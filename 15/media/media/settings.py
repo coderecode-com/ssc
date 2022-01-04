@@ -12,10 +12,10 @@ BOT_NAME = 'media'
 SPIDER_MODULES = ['media.spiders']
 NEWSPIDER_MODULE = 'media.spiders'
 ITEM_PIPELINES = {
-    # 'media.pipelines.CustomFilesPipeline': 1,
+    'media.pipelines.CustomFilesPipeline': 1,
     'media.pipelines.CustomImagePipeline': 1
     }
-# FILES_STORE = 'custom_file_names'
+FILES_STORE = 'downloaded_pdfs'
 IMAGES_STORE = 'downloaded_images'
 IMAGES_THUMBS ={
     '50px_small_any':(50,50),

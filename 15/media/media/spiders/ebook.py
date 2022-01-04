@@ -1,8 +1,8 @@
 import scrapy
 from media.items import MediaItem
 
-class PdfSpider(scrapy.Spider):
-    name = 'pdf'
+class EbookSpider(scrapy.Spider):
+    name = 'ebook'
     start_urls = ['https://www.scrapebay.com/ebooks']
 
     def parse(self, response):
