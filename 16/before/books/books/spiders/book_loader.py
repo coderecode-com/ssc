@@ -1,0 +1,20 @@
+import scrapy
+from scrapy.loader import ItemLoader
+
+from books.items import BooksItem
+
+
+class BookLoaderSpider(scrapy.Spider):
+    name = 'book_loader'
+    allowed_domains = ['books.toscrape.com']
+    start_urls = ['https://books.toscrape.com/']
+
+    def parse(self, response):
+        for s in response.xpath('//ol[@class="row"]/li'):
+            loader = ItemLoader(item=BooksItem(), selector=s)
+
+            loader.add_xpath('title', './/img/@alt')
+            loader.add_xpath('price', './/*[@class="price_color"]/text()')
+            loader.add_xpath('currency', './/*[@class="price_color"]/text()')
+            loader.add_xpath('available', './/*[@class="instock availability"]')
+            yield loader.load_item()
