@@ -1,0 +1,3 @@
+scraper-helper
+Scrapy
+scrapy-rotating-proxies
