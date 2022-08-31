@@ -7,7 +7,6 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 
-import sqlite3
 import xlsxwriter
 
 
@@ -55,13 +54,14 @@ class ExcelOutputPipeline:
         d = adapter.asdict()
 
         if self.current_row_index == 0:  # Write Header
-            data = d.keys()
             fmt = self.heading_format
-        else:  # write values
-            data = d.values()
-            fmt = self.cell_format
+            for column, value in enumerate(d.keys()):
+                self.worksheet.write(self.current_row_index, column, value, fmt)
+
+        data = d.values()
+        fmt = self.cell_format
 
         for column, value in enumerate(data):
-            self.worksheet.write(self.current_row_index, column, value, fmt)
+            self.worksheet.write(self.current_row_index+1, column, value, fmt)
 
         self.current_row_index += 1
